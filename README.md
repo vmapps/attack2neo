@@ -26,7 +26,18 @@ graph_auth = ("neo4j","test")
 ```
 ## Usage
 ```
-usage: attack2neo.py <filename>
+usage: attack2neo.py [-h] [-d] -f <filename> [-g] [-s] [-o] [-t] [-r]
+
+optional arguments:
+  -h, --help        show this help message and exit
+  -d, --debug       enter debug mode
+  -f <filename>     input file name
+  -g, --groups      import Groups objects (type:intrusion-set)
+  -s, --softwares   import Softwares objects (type:malware)
+  -o, --tools       import Tools objects (type:tool)
+  -t, --techniques  import Techniques objects (type:attack-pattern and
+                    type:course-of-action)
+  -r, --relations   import Relations objects (type:relationship)
 ```
 where <filename> contains JSON data from Mitre Att&amp;ck
 
