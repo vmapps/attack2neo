@@ -71,3 +71,11 @@ Relation: "Leviathan" -[uses]-> "BITSAdmin"
 Then, we can query Neo4j database :
 
 ![attack2neo](samples/attack2neo.png)
+
+## Queries samples
+Find aliases for group "APT18":
+```
+MATCH (g:Group {name:"APT18"}) 
+WITH g MATCH (g) - [:alias] -> (a:Alias)
+RETURN g,a
+```
