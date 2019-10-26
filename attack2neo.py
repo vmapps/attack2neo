@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import argparse
 import json
 import sys
 from py2neo import Graph, Node, Relationship, NodeMatcher
@@ -26,7 +27,7 @@ def build_aliases(obj,key):
 	# create node for the group
 	node_main = Node(label, name=obj['name'], id=obj['id'])
 	graph.merge(node_main,label,'name')
-	print('%s: "%s"' % (label,obj['name']),end='')
+	print('%s: "%s"' % (label,obj['name']),end='') if dbg_mode else None
 
 	# dealing with aliases
 	if obj.get(key):
@@ -35,8 +36,8 @@ def build_aliases(obj,key):
 				node_alias = Node('Alias', name=alias)
 				relation = Relationship.type('alias')
 				graph.merge(relation(node_main,node_alias),label,'name')
-				print(' -[alias]-> "%s"' % (alias),end='')
-	print()
+				print(' -[alias]-> "%s"' % (alias),end='') if dbg_mode else None
+	print() if dbg_mode else None
 
 # -----------------------------------------------------------------
 # BUILD RELATIONS
@@ -56,62 +57,89 @@ def build_relations(obj):
 	relation = Relationship.type( obj['relationship_type'] )
 
 	graph.merge(relation(source,target),build_label(obj['source_ref']),'name')
-	print('Relation: "%s" -[%s]-> "%s"' % (gnames[obj['source_ref']],obj['relationship_type'],gnames[obj['target_ref']]) )
+	print('Relation: "%s" -[%s]-> "%s"' % (gnames[obj['source_ref']],obj['relationship_type'],gnames[obj['target_ref']]) ) if dbg_mode else None
 
 # -----------------------------------------------------------------
 # MAIN
 # -----------------------------------------------------------------
 
+#
+# set command-line arguments and parsing options
+parser = argparse.ArgumentParser()
+parser.add_argument('-d','--debug', help='enter debug mode', default=False, action='store_true')
+parser.add_argument('-f', help='input file name', metavar='<filename>', action='store', required=True)
+parser.add_argument('-g','--groups', help='import Groups objects (type:intrusion-set)', default=False, action='store_true')
+parser.add_argument('-s','--softwares', help='import Softwares objects (type:malware)', default=False, action='store_true')
+parser.add_argument('-o','--tools', help='import Tools objects (type:tool)', default=False, action='store_true')
+parser.add_argument('-t','--techniques', help='import Techniques objects (type:attack-pattern and type:course-of-action)', default=False, action='store_true')
+parser.add_argument('-r','--relations', help='import Relations objects (type:relationship)', default=False, action='store_true')
+args = parser.parse_args()
+
+#
+# checks arguments and options
+dbg_mode = True if args.debug else None
+json_file = args.f if args.f else None
+
+#
 # load JSON data from file
-#json_file = 'mitre-enterprise-attack.json'
-json_file = sys.argv[1]
+try:
+	with open(json_file) as fh:
+		data = json.load(fh)
+	fh.close()
+except Exception as e:
+	sys.stderr.write( '[ERROR] reading configuration file %s\n' % json_file )
+	sys.stderr.write( '[ERROR] %s\n' % str(e) )
+	sys.exit(1)
 
-with open(json_file) as fh:
-    data = json.load(fh)
-fh.close()
-
+#
 # open graph connection
 graph_bolt = "bolt://127.0.0.1:7687"
 graph_auth = ("neo4j","test")
 
 graph = Graph(graph_bolt,auth=graph_auth)
 
+# 
 # Delete existing nodes and edges
 graph.delete_all()
 
-# global names
+# 
+# Global names
 gnames = {}
 
+# 
 # Walk through JSON objects to create nodes
 for obj in data['objects']:
 
 	# if JSON object is about Groups
-	if obj['type']=='intrusion-set':
+	if args.groups and obj['type']=='intrusion-set':
 		gnames[ obj['id'] ] = obj['name']
 		build_aliases(obj,'aliases')
 
 	# if JSON object is about Softwares
-	if obj['type']=='malware':
+	if args.softwares and obj['type']=='malware':
 		gnames[ obj['id'] ] = obj['name']
 		build_aliases(obj,'x_mitre_aliases')
 
 	# if JSON object is about Tools
-	if obj['type']=='tool':
+	if args.tools and obj['type']=='tool':
 		gnames[ obj['id'] ] = obj['name']
 		build_aliases(obj,'x_mitre_aliases')
 
 	# if JSON object is about Techniques
-	if obj['type']=='attack-pattern' or obj['type']=='course-of-action':
+	if args.techniques and (obj['type']=='attack-pattern' or obj['type']=='course-of-action'):
 		gnames[ obj['id'] ] = obj['name']
 		label = build_label(obj['type'])
 		node_main = Node(label, name=obj['name'], id=obj['id'])
 		graph.merge(node_main,label,'name')
-		print('%s: "%s"' % (label,obj['name']) )
+		print('%s: "%s"' % (label,obj['name']) ) if dbg_mode else None
 
+# 
 # Walk through JSON objects to create edges
 for obj in data['objects']:
 
 	# if JSON object is about Relationships
-	if obj['type']=='relationship':
+	if args.relations and obj['type']=='relationship':
 		build_relations(obj)
 
+#
+# End
