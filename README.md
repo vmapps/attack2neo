@@ -93,7 +93,7 @@ Find groups who are using software "ASPXSpy":
 ```
 MATCH (s:Software)
 WHERE s.name = "ASPXSpy" 
-WITH s MATCH (s) <- [:uses] -> (g:Group)
+WITH s MATCH (s) <- [:uses] - (g:Group)
 RETURN s.name AS Software, g.name AS Group
 
 ╒══════════╤═══════════════════╕
@@ -108,4 +108,24 @@ RETURN s.name AS Software, g.name AS Group
 │"ASPXSpy" │"Threat Group-3390"│
 └──────────┴───────────────────┘
 ```
+
+Find groups - and their aliases - who are using software "BISCUIT":
+```
+MATCH (s:Software {name:"BISCUIT"}) <-[*1..2]-> (g:Group)
+RETURN s.name AS Software, g.name AS Group
+
+╒══════════╤═══════════════╕
+│"Software"│"Group"        │
+╞══════════╪═══════════════╡
+│"BISCUIT" │"APT1"         │
+├──────────┼───────────────┤
+│"BISCUIT" │"Comment Crew" │
+├──────────┼───────────────┤
+│"BISCUIT" │"Comment Group"│
+├──────────┼───────────────┤
+│"BISCUIT" │"Comment Panda"│
+└──────────┴───────────────┘
+```
+
+
 
