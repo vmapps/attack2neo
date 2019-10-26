@@ -1,5 +1,5 @@
 # attack2neo
-Import Mitre Att&amp;ck data into Neo4j database
+Import Mitre Entreprise Att&amp;ck data into Neo4j database
 
 ## Purpose 
 Purpose of this very simple tool is to :
@@ -42,8 +42,8 @@ optional arguments:
 where <filename> contains JSON data from Mitre Att&amp;ck
 
 ## Mitre Att&amp;ck database
-The Mitre Atta&amp;ck database in JSON format could be
-found out at [Mitre CTI Github](https://raw.githubusercontent.com/mitre/cti/master/enterprise-attack/enterprise-attack.json)
+The Mitre Entreprise Atta&amp;ck database in JSON format could be
+found out at [Mitre CTI Github](https://github.com/mitre/cti/blob/master/enterprise-attack/enterprise-attack.json)
 
 ## Sample 
 ![attack2neo](samples/attack2neo.png)
