@@ -48,7 +48,7 @@ found out at [Mitre CTI Github](https://github.com/mitre/cti/blob/master/enterpr
 ## Sample
 Let's first import data from Mitre Entreprise Att&amp;ck:
 ```
-$ ./attack2neo.py --debug -f archives/mitre-enterprise-attack.json --groups --softwares --tools --relations
+$ ./attack2neo.py --debug -f mitre-enterprise-attack.json --groups --softwares --tools --relations
 [...]
 Group: "Dragonfly 2.0" -[alias]-> "Berserk Bear"
 Group: "Dust Storm"
