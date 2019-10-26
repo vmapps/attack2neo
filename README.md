@@ -11,7 +11,7 @@ query Mitre Att&amp;ck data using Cypher Query Language.
 
 ## Requirements
 Following python modules are required :
-- [py2neo](https://py2neo.org/)
+- [py2neo v4](https://py2neo.org/v4/)
 
 Modules could be installed using following commands:
 ```
@@ -24,6 +24,10 @@ Settings have to be defined directly into python script :
 graph_bolt = "bolt://127.0.0.1:7687"
 graph_auth = ("neo4j","test")
 ```
+Custom settings according to your Neo4j installation:
+- `graph_bolt` contains connection details provided using URIs such as `bolt://<ip_address>:<port>`
+- `graph_auth` contains a 2-tuple of (`<user>`,`<password>`) to connect to Neo4j database
+
 ## Usage
 ```
 usage: attack2neo.py [-h] [-d] -f <filename> [-g] [-s] [-o] [-t] [-r]
