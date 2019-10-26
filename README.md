@@ -5,6 +5,7 @@ Import Mitre Att&amp;ck into Neo4j database
 Purpose of this very simple tool is to :
 - read JSON data from Mitre Att&amp;ck
 - import data into Neo4j database
+
 This small project has been first been developed to be able to 
 easily query Mitre Att&amp;ck data using Cypher Query Language.
 
