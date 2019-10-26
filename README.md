@@ -127,5 +127,6 @@ RETURN s.name AS Software, g.name AS Group
 └──────────┴───────────────┘
 ```
 
+See [Neo4j's Cypher queries cheatsheet](https://gist.github.com/DaniSancas/1d5265fc159a95ff457b940fc5046887) to get some Neo4j and Cypher fundamentals.
 
 
