@@ -46,4 +46,5 @@ The Mitre Atta&amp;ck database in JSON format could be
 found out at [Mitre CTI Github](https://raw.githubusercontent.com/mitre/cti/master/enterprise-attack/enterprise-attack.json)
 
 ## Sample 
-![attack2neo](samples/attack2neo.png)
+![attack2neo](samples/attack2neo-1.png)
+![attack2neo](samples/attack2neo-2.png)
