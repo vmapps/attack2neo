@@ -89,3 +89,23 @@ RETURN g.name AS Name, a AS Alias
 │"APT18"│{"name":"TG-0416"}          │
 └───────┴────────────────────────────┘
 ```
+Find groups who are using software "ASPXSpy":
+```
+MATCH (s:Software)
+WHERE s.name = "ASPXSpy" 
+WITH s MATCH (s) <- [:uses] -> (g:Group)
+RETURN s.name AS Software, g.name AS Group
+
+╒══════════╤═══════════════════╕
+│"Software"│"Group"            │
+╞══════════╪═══════════════════╡
+│"ASPXSpy" │"APT41"            │
+├──────────┼───────────────────┤
+│"ASPXSpy" │"APT39"            │
+├──────────┼───────────────────┤
+│"ASPXSpy" │"Night Dragon"     │
+├──────────┼───────────────────┤
+│"ASPXSpy" │"Threat Group-3390"│
+└──────────┴───────────────────┘
+```
+
