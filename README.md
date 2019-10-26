@@ -45,5 +45,28 @@ where <filename> contains JSON data from Mitre Att&amp;ck
 The Mitre Entreprise Atta&amp;ck database in JSON format could be
 found out at [Mitre CTI Github](https://github.com/mitre/cti/blob/master/enterprise-attack/enterprise-attack.json)
 
-## Sample 
+## Sample
+Let's first import data from Mitre Entreprise Att&amp;ck:
+```
+$ ./attack2neo.py --debug -f archives/mitre-enterprise-attack.json --groups --softwares --tools --relations
+[...]
+Group: "Dragonfly 2.0" -[alias]-> "Berserk Bear"
+Group: "Dust Storm"
+Group: "Elderwood" -[alias]-> "Elderwood Gang" -[alias]-> "Beijing Group" -[alias]-> "Sneaky Panda"
+[...]
+Software: "BUBBLEWRAP" -[alias]-> "Backdoor.APT.FakeWinHTTPHelper"
+Software: "BabyShark"
+Software: "Backdoor.Oldrea" -[alias]-> "Havex"
+[...]
+Tool: "Pass-The-Hash Toolkit"
+Tool: "Ping" -[alias]-> "ping.exe"
+Tool: "PoshC2"
+[...]
+Relation: "FIN5" -[uses]-> "PsExec"
+Relation: "DarkHydrus" -[uses]-> "Cobalt Strike"
+Relation: "Leviathan" -[uses]-> "BITSAdmin"
+[...]
+```
+
+Then, we can query Neo4j database :
 ![attack2neo](samples/attack2neo.png)
