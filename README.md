@@ -69,4 +69,5 @@ Relation: "Leviathan" -[uses]-> "BITSAdmin"
 ```
 
 Then, we can query Neo4j database :
+
 ![attack2neo](samples/attack2neo.png)
