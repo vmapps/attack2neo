@@ -27,10 +27,10 @@ graph_auth = ("neo4j","test")
 ## Usage
 ```
 usage: attack2neo.py <filename>
-  
-where <filename> contains JSON data from Mitre Att&amp;ck
 ```
+where <filename> contains JSON data from Mitre Att&amp;ck
+
 ## Mitre Att&amp;ck database
-The Mitre Atta7amp;ck database in JSON format could be
+The Mitre Atta&amp;ck database in JSON format could be
 found out at [Mitre CTI Github](https://raw.githubusercontent.com/mitre/cti/master/enterprise-attack/enterprise-attack.json)
 
