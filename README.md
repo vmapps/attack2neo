@@ -135,10 +135,10 @@ Find all about a specifc group:
 ```
 MATCH (n)-[r]-(m)
 WHERE n.name='APT1'
-RETURN n.name,TYPE(r),m.name
+RETURN n.name AS Group, TYPE(r) AS Verb, m.name AS Object
 
 ╒════════╤═════════╤═══════════════════════╕
-│"n.name"│"TYPE(r)"│"m.name"               │
+│"Group" │"Verb"   │"Object"               │
 ╞════════╪═════════╪═══════════════════════╡
 │"APT1"  │"uses"   │"Seasalt"              │
 ├────────┼─────────┼───────────────────────┤
