@@ -77,7 +77,7 @@ Then, we can query Neo4j database using Neo4j Browser:
 ![attack2neo](samples/attack2neo.png)
 
 ## Visualization
-Into `visualization`, there are files `attack2neo.html` and `attack2neo.js` to provide simple HTML tool to visualize your Neo4j Cypher queries using [neovis.js](https://github.com/neo4j-contrib/neovis.js) library.
+Under `visualization` folder, there are files `attack2neo.html` and `attack2neo.js` to provide simple HTML tool to visualize your Neo4j Cypher queries using [neovis.js](https://github.com/neo4j-contrib/neovis.js) library.
 
 Settings have to be defined directly into javascript file :
 ```
