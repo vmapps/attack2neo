@@ -77,7 +77,7 @@ Then, we can query Neo4j database using Neo4j Browser:
 ![attack2neo](samples/attack2neo.png)
 
 ## Visualization
-Here are files `attack2neo.html` and `attack2neo.js` to provide simple HTML tool to visualize your Neo4j Cypher queries using [neovis.js](https://github.com/neo4j-contrib/neovis.js) library.
+Into `visualization`, there are files `attack2neo.html` and `attack2neo.js` to provide simple HTML tool to visualize your Neo4j Cypher queries using [neovis.js](https://github.com/neo4j-contrib/neovis.js) library.
 
 Settings have to be defined directly into javascript file :
 ```
@@ -91,6 +91,8 @@ Custom settings according to your Neo4j installation:
 - `server_user` contains user value to connect to Neo4j database
 - `server_password` contains password value to connect to Neo4j database
 - `initial_cypher` contains Cypher query to be run
+
+![attack2neo](visualization/attack2neo.png)
 
 ## Queries samples
 Find aliases for group "APT18":
