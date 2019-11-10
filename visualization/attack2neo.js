@@ -25,7 +25,8 @@ function draw() {
 		hierarchical: false,
 		hierarchical_sort_method: "directed",
 		console_debug: false,
-		initial_cypher: "MATCH (n)-[r]-(m) WHERE n.name=\"APT1\" RETURN n,r,m"
+		//initial_cypher: "MATCH (n)-[r]-(m) WHERE n.name=\"APT1\" RETURN n,r,m"
+		initial_cypher: "MATCH (n)-[r]-(m) RETURN n,r,m"
 	};
 
 	viz = new NeoVis.default(config);
