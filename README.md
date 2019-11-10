@@ -90,7 +90,7 @@ Custom settings according to your Neo4j installation:
 - `server_url` contains connection details provided using URIs such as `bolt://<ip_address>:<port>`
 - `server_user` contains user value to connect to Neo4j database
 - `server_password` contains password value to connect to Neo4j database
-- `initial_cypher` contains Cypher query to b e run
+- `initial_cypher` contains Cypher query to be run
 
 ## Queries samples
 Find aliases for group "APT18":
