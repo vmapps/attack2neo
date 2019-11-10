@@ -72,9 +72,12 @@ Relation: "Leviathan" -[uses]-> "BITSAdmin"
 [...]
 ```
 
-Then, we can query Neo4j database :
+Then, we can query Neo4j database using Neo4j Browser:
 
 ![attack2neo](samples/attack2neo.png)
+
+## Visualization
+Here are files `attack2neo.html` and `attack2neo.js` to provide simple HTML tool to visualize your Neo4j Cypher queries using [neovis.js](https://github.com/neo4j-contrib/neovis.js) library.
 
 ## Queries samples
 Find aliases for group "APT18":
