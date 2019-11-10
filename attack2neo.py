@@ -2,8 +2,9 @@
 
 import argparse
 import json
+import re
 import sys
-from py2neo import Graph, Node, Relationship, NodeMatcher
+from py2neo import Graph, Node, Relationship, NodeMatcher, cypher
 
 # -----------------------------------------------------------------
 # BUILD_LABEL
@@ -20,20 +21,36 @@ def build_label(txt):
 # -----------------------------------------------------------------
 # BUILD ALIASES
 # -----------------------------------------------------------------
-def build_aliases(obj,key):
+def build_objects(obj,key):
 
 	label = build_label(obj['type'])
 
+	# add properties
+	props = {}
+	props['name'] = obj['name']
+	props['id'] = obj['id']
+	props['type'] = obj['type']
+	if obj.get('description'):		props['description'] = obj['description'] # cypher.cypher_escape( obj['description'] )
+	if obj.get('created'):			props['created'] = obj['created']
+	if obj.get('modified'):			props['modified'] = obj['modified']
+	if obj.get('x_mitre_version'):	props['version'] = obj['x_mitre_version']
 	# create node for the group
-	node_main = Node(label, name=obj['name'], id=obj['id'])
+	node_main = Node(label, **props)
+	# merge node to graph
 	graph.merge(node_main,label,'name')
 	print('%s: "%s"' % (label,obj['name']),end='') if dbg_mode else None
 
 	# dealing with aliases
-	if obj.get(key):
-		for alias in obj[key]:
+	if obj.get('aliases'): 
+		aliases = obj['aliases']
+	elif obj.get('x_mitre_aliases'): 
+		aliases = obj['x_mitre_aliases']
+	else:
+		aliases = None
+	if aliases:
+		for alias in aliases:
 			if alias != obj['name']:
-				node_alias = Node('Alias', name=alias)
+				node_alias = Node('Alias', name=alias, type=obj['type'])
 				relation = Relationship.type('alias')
 				graph.merge(relation(node_main,node_alias),label,'name')
 				print(' -[alias]-> "%s"' % (alias),end='') if dbg_mode else None
@@ -113,25 +130,26 @@ for obj in data['objects']:
 	# if JSON object is about Groups
 	if args.groups and obj['type']=='intrusion-set':
 		gnames[ obj['id'] ] = obj['name']
-		build_aliases(obj,'aliases')
+		build_objects(obj,'aliases')
 
 	# if JSON object is about Softwares
 	if args.softwares and obj['type']=='malware':
 		gnames[ obj['id'] ] = obj['name']
-		build_aliases(obj,'x_mitre_aliases')
+		build_objects(obj,'x_mitre_aliases')
 
 	# if JSON object is about Tools
 	if args.tools and obj['type']=='tool':
 		gnames[ obj['id'] ] = obj['name']
-		build_aliases(obj,'x_mitre_aliases')
+		build_objects(obj,'x_mitre_aliases')
 
 	# if JSON object is about Techniques
 	if args.techniques and (obj['type']=='attack-pattern' or obj['type']=='course-of-action'):
 		gnames[ obj['id'] ] = obj['name']
-		label = build_label(obj['type'])
-		node_main = Node(label, name=obj['name'], id=obj['id'])
-		graph.merge(node_main,label,'name')
-		print('%s: "%s"' % (label,obj['name']) ) if dbg_mode else None
+		build_objects(obj,null)
+		# label = build_label(obj['type'])
+		# node_main = Node(label, name=obj['name'], id=obj['id'])
+		# graph.merge(node_main,label,'name')
+		# print('%s: "%s"' % (label,obj['name']) ) if dbg_mode else None
 
 # 
 # Walk through JSON objects to create edges
