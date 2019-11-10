@@ -79,6 +79,19 @@ Then, we can query Neo4j database using Neo4j Browser:
 ## Visualization
 Here are files `attack2neo.html` and `attack2neo.js` to provide simple HTML tool to visualize your Neo4j Cypher queries using [neovis.js](https://github.com/neo4j-contrib/neovis.js) library.
 
+Settings have to be defined directly into javascript file :
+```
+server_url: "bolt://localhost:7687",
+server_user: "neo4j",
+server_password: "test",
+initial_cypher: "MATCH (n)-[r]-(m) RETURN n,r,m"
+```
+Custom settings according to your Neo4j installation:
+- `server_url` contains connection details provided using URIs such as `bolt://<ip_address>:<port>`
+- `server_user` contains user value to connect to Neo4j database
+- `server_password` contains password value to connect to Neo4j database
+- `initial_cypher` contains Cypher query to b e run
+
 ## Queries samples
 Find aliases for group "APT18":
 ```
