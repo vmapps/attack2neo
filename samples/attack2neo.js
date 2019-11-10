@@ -11,10 +11,10 @@ function draw() {
 		server_user: "neo4j",
 		server_password: "test",
 		labels: {
-			"Alias": 	{ "caption": "name", "size":2, "community":"color"  },
-			"Group": 	{ "caption": "name", "size":2, "community":"color" },
-			"Software": { "caption": "name", "size":1, "community":"color" },
-			"Tool": 	{ "caption": "name", "size":1, "community":"color" },
+			"Alias": 	{ "caption": "name", "size":2 },
+			"Group": 	{ "caption": "name", "size":2 },
+			"Software": { "caption": "name", "size":1 },
+			"Tool": 	{ "caption": "name", "size":1 },
 		},
 		relationships: {
 			"alias": 		{ "caption": true },
