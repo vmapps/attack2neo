@@ -145,7 +145,7 @@ for obj in data['objects']:
 	# if JSON object is about Techniques
 	if args.techniques and (obj['type']=='attack-pattern' or obj['type']=='course-of-action'):
 		gnames[ obj['id'] ] = obj['name']
-		build_objects(obj,null)
+		build_objects(obj,None)
 		# label = build_label(obj['type'])
 		# node_main = Node(label, name=obj['name'], id=obj['id'])
 		# graph.merge(node_main,label,'name')
