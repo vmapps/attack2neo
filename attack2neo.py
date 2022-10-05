@@ -16,6 +16,7 @@ def build_label(txt):
 	if txt.startswith('tool'):				return 'Tool'
 	if txt.startswith('attack-pattern'):	return 'Technique'
 	if txt.startswith('course-of-action'):	return 'Technique'
+	if txt.startswith('x-mitre-tactic'):	return 'Technique'
 	return 'Unknown'
 
 # -----------------------------------------------------------------
@@ -143,7 +144,7 @@ for obj in data['objects']:
 		build_objects(obj,'x_mitre_aliases')
 
 	# if JSON object is about Techniques
-	if args.techniques and (obj['type']=='attack-pattern' or obj['type']=='course-of-action'):
+	if args.techniques and (obj['type']=='attack-pattern' or obj['type']=='course-of-action' or obj['type']=='x-mitre-tactic'):
 		gnames[ obj['id'] ] = obj['name']
 		build_objects(obj,None)
 		# label = build_label(obj['type'])
