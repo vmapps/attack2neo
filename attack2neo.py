@@ -100,7 +100,7 @@ json_file = args.f if args.f else None
 #
 # load JSON data from file
 try:
-	with open(json_file) as fh:
+	with open(json_file, encoding='utf-8') as fh:
 		data = json.load(fh)
 	fh.close()
 except Exception as e:
