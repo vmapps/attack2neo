@@ -35,6 +35,17 @@ def build_objects(obj,key):
 	if obj.get('created'):			props['created'] = obj['created']
 	if obj.get('modified'):			props['modified'] = obj['modified']
 	if obj.get('x_mitre_version'):	props['version'] = obj['x_mitre_version']
+
+	# kem Add TechniqueID ( the T/TA numbers) from each data['object']
+	if obj.get('external_references'):
+		for ref in obj['external_references']:
+			if ref.get('external_id'):
+#				if ref.get('external_id').startswith('T'): 
+#				props.setdefault('technique_id', []).append(ref['external_id']) 
+				props['technique_id'] = ref['external_id']		# capture T/TA# and change name to technique_id
+			else: 
+				continue 
+	
 	# create node for the group
 	node_main = Node(label, **props)
 	# merge node to graph
