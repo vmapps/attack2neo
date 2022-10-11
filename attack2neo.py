@@ -15,7 +15,7 @@ graph = Graph(graph_bolt,auth=graph_auth)
 
 # 
 # Delete existing nodes and edges
-graph.delete_all()
+# graph.delete_all()
 
 # -----------------------------------------------------------------
 # BUILD_LABEL
