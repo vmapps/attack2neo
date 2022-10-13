@@ -15,7 +15,7 @@ graph = Graph(graph_bolt,auth=graph_auth)
 
 # 
 # Delete existing nodes and edges
-# graph.delete_all()
+graph.delete_all()
 
 # -----------------------------------------------------------------
 # BUILD_LABEL
@@ -27,13 +27,15 @@ def build_label(txt):
 	if txt.startswith('tool'):				return 'Tool'
 	if txt.startswith('attack-pattern'):	return 'Technique'
 	if txt.startswith('course-of-action'):	return 'Technique'
-	if txt.startswith('x-mitre-tactic'):	return 'Technique'
+	if txt.startswith('x-mitre-tactic'):	return 'Technique'	# kem Added to get the TAxxxx types
 	return 'Unknown'
 
 # -----------------------------------------------------------------
 # BUILD ALIASES
 # -----------------------------------------------------------------
 def build_objects(obj,key):
+
+	# kem Should object not be processed? return without processing
 
 	label = build_label(obj['type'])
 
@@ -42,11 +44,12 @@ def build_objects(obj,key):
 	props['name'] = obj['name']
 	props['id'] = obj['id']
 	props['type'] = obj['type']
-	if obj.get('description'):		props['description'] = obj['description'] # cypher.cypher_escape( obj['description'] )
-	if obj.get('created'):			props['created'] = obj['created']
-	if obj.get('modified'):			props['modified'] = obj['modified']
-	if obj.get('x_mitre_version'):	props['version'] = obj['x_mitre_version']
-
+	if obj.get('description'):			props['description'] = obj['description'] # cypher.cypher_escape( obj['description'] )
+	if obj.get('created'):				props['created'] = obj['created']
+	if obj.get('modified'):				props['modified'] = obj['modified']
+	if obj.get('x_mitre_version'):		props['version'] = obj['x_mitre_version']
+	if obj.get('x_mitre_deprecated'):	props['deprecated'] = obj['x_mitre_deprecated']		# kem Capture that deprecated flag so we can check
+	
 	# kem Add TechniqueID ( the T/TA numbers) from each data['object']
 	if obj.get('external_references'):
 		for ref in obj['external_references']:
