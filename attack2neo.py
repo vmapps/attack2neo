@@ -6,6 +6,17 @@ import re
 import sys
 from py2neo import Graph, Node, Relationship, NodeMatcher, cypher
 
+#
+# open graph connection
+graph_bolt = "bolt://127.0.0.1:7687"
+graph_auth = ("neo4j","test")
+
+graph = Graph(graph_bolt,auth=graph_auth)
+
+# 
+# Delete existing nodes and edges
+graph.delete_all()
+
 # -----------------------------------------------------------------
 # BUILD_LABEL
 # -----------------------------------------------------------------
@@ -16,12 +27,15 @@ def build_label(txt):
 	if txt.startswith('tool'):				return 'Tool'
 	if txt.startswith('attack-pattern'):	return 'Technique'
 	if txt.startswith('course-of-action'):	return 'Technique'
+	if txt.startswith('x-mitre-tactic'):	return 'Technique'	# kem Added to get the TAxxxx types
 	return 'Unknown'
 
 # -----------------------------------------------------------------
 # BUILD ALIASES
 # -----------------------------------------------------------------
 def build_objects(obj,key):
+
+	# kem Should object not be processed? return without processing
 
 	label = build_label(obj['type'])
 
@@ -30,10 +44,22 @@ def build_objects(obj,key):
 	props['name'] = obj['name']
 	props['id'] = obj['id']
 	props['type'] = obj['type']
-	if obj.get('description'):		props['description'] = obj['description'] # cypher.cypher_escape( obj['description'] )
-	if obj.get('created'):			props['created'] = obj['created']
-	if obj.get('modified'):			props['modified'] = obj['modified']
-	if obj.get('x_mitre_version'):	props['version'] = obj['x_mitre_version']
+	if obj.get('description'):			props['description'] = obj['description'] # cypher.cypher_escape( obj['description'] )
+	if obj.get('created'):				props['created'] = obj['created']
+	if obj.get('modified'):				props['modified'] = obj['modified']
+	if obj.get('x_mitre_version'):		props['version'] = obj['x_mitre_version']
+	if obj.get('x_mitre_deprecated'):	props['deprecated'] = obj['x_mitre_deprecated']		# kem Capture that deprecated flag so we can check
+	
+	# kem Add TechniqueID ( the T/TA numbers) from each data['object']
+	if obj.get('external_references'):
+		for ref in obj['external_references']:
+			if ref.get('external_id'):
+#				if ref.get('external_id').startswith('T'): 
+#				props.setdefault('technique_id', []).append(ref['external_id']) 
+				props['technique_id'] = ref['external_id']		# capture T/TA# and change name to technique_id
+			else: 
+				continue 
+	
 	# create node for the group
 	node_main = Node(label, **props)
 	# merge node to graph
@@ -100,24 +126,13 @@ json_file = args.f if args.f else None
 #
 # load JSON data from file
 try:
-	with open(json_file) as fh:
+	with open(json_file, encoding='utf-8') as fh:
 		data = json.load(fh)
 	fh.close()
 except Exception as e:
 	sys.stderr.write( '[ERROR] reading configuration file %s\n' % json_file )
 	sys.stderr.write( '[ERROR] %s\n' % str(e) )
 	sys.exit(1)
-
-#
-# open graph connection
-graph_bolt = "bolt://127.0.0.1:7687"
-graph_auth = ("neo4j","test")
-
-graph = Graph(graph_bolt,auth=graph_auth)
-
-# 
-# Delete existing nodes and edges
-graph.delete_all()
 
 # 
 # Global names
@@ -143,7 +158,7 @@ for obj in data['objects']:
 		build_objects(obj,'x_mitre_aliases')
 
 	# if JSON object is about Techniques
-	if args.techniques and (obj['type']=='attack-pattern' or obj['type']=='course-of-action'):
+	if args.techniques and (obj['type']=='attack-pattern' or obj['type']=='course-of-action' or obj['type']=='x-mitre-tactic'):
 		gnames[ obj['id'] ] = obj['name']
 		build_objects(obj,None)
 		# label = build_label(obj['type'])
